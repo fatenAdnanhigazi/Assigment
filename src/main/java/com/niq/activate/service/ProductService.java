@@ -1,51 +1,22 @@
 package com.niq.activate.service;
 
-
-import com.niq.activate.entity.ProductMetadata;
-import com.niq.activate.entity.ShopperProduct;
-import com.niq.activate.repository.ProductMetadataRepository;
-import com.niq.activate.repository.ShopperProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.niq.activate.entity.Product;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-
 public class ProductService {
-    @Autowired
-    private final ShopperProductRepository shopperProductRepository;
 
-    @Autowired
-    private final ProductMetadataRepository productMetadataRepository;
-
-    public ProductService(ShopperProductRepository shopperProductRepository, ProductMetadataRepository productMetadataRepository) {
-        this.shopperProductRepository = shopperProductRepository;
-        this.productMetadataRepository = productMetadataRepository;
-    }
-
-    public void saveShopperProducts(List<ShopperProduct> products) {
-        shopperProductRepository.saveAll(products);
-    }
-
-    public void saveProductMetadata(ProductMetadata metadata) {
-        productMetadataRepository.save(metadata);
-    }
-
-    public List<ShopperProduct> getProductsByShopper(String shopperId, String category, String brand, int limit) {
-        List<ShopperProduct> products = shopperProductRepository.findByShopperId(shopperId);
-
-        // Filtering and limiting
-        if (category != null || brand != null) {
-            products = products.stream().filter(product -> {
-                ProductMetadata metadata = productMetadataRepository.findByProductId(product.getProductId());
-                return (category == null || category.equals(metadata.getCategory())) &&
-                        (brand == null || brand.equals(metadata.getBrand()));
-            }).collect(Collectors.toList());
-        }
-
-        return products.stream().limit(limit).collect(Collectors.toList());
+    public List<String> parseProductIds(String jsonArray) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Product> products = objectMapper.readValue(jsonArray, new TypeReference<List<Product>>() {
+        });
+        return products.stream().map(Product::getProductId).collect(Collectors.toList());
     }
 }
 
