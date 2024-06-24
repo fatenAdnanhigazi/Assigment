@@ -1,4 +1,4 @@
-package com.niq.activate.Respomse;
+package com.niq.activate.controller;
 
 import com.niq.activate.entity.Product;
 

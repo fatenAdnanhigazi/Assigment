@@ -1,19 +1,21 @@
 package com.niq.activate.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.Entity;
-import org.springframework.data.annotation.Id;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 
 @Entity
+@Table(name = "product_metadata")
 public class Product {
     @Id
     private Long id;
-    @JsonProperty("productId")
+
     private String productId;
-    @JsonProperty("category")
+
     private String category;
-    @JsonProperty("brand")
+
     private String brand;
 
     // Getters and Setters

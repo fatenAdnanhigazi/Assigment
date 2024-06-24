@@ -1,8 +1,10 @@
 package com.niq.activate.repository;
 
-import com.niq.activate.entity.Product;
+import com.niq.activate.entity.ShopperShelves;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 
-public interface ProductRepository extends JpaRepository<Product, String> {
+public interface ShopperShelfRepository extends JpaRepository<ShopperShelves, Long> {
+    List<ShopperShelves> findByShopperId(String shopperId);
 }
